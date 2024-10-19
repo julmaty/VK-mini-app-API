@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  vk-mini-app:
+    image: ${DOCKER_REGISTRY-}vkminiapp
+    build:
+      context: .
+      dockerfile: VK-mini-app/Dockerfile

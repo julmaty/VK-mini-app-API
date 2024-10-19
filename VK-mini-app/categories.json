@@ -1,0 +1,132 @@
+{
+  "res": [
+    {
+      "id": 1,
+      "name": "basketball"
+    },
+    {
+      "id": 2,
+      "name": "badminton"
+    },
+    {
+      "id": 3,
+      "name": "skiing"
+    },
+    {
+      "id": 4,
+      "name": "tennis"
+    },
+    {
+      "id": 5,
+      "name": "chess"
+    },
+    {
+      "id": 6,
+      "name": "table_tennis"
+    },
+    {
+      "id": 7,
+      "name": "billiards"
+    },
+    {
+      "id": 8,
+      "name": "esports"
+    },
+    {
+      "id": 9,
+      "name": "football"
+    },
+    {
+      "id": 10,
+      "name": "swimming"
+    },
+    {
+      "id": 11,
+      "name": "darts"
+    },
+    {
+      "id": 12,
+      "name": "handball"
+    },
+    {
+      "id": 13,
+      "name": "rowing"
+    },
+    {
+      "id": 14,
+      "name": "running"
+    },
+    {
+      "id": 15,
+      "name": "yoga"
+    },
+    {
+      "id": 16,
+      "name": "fencing"
+    },
+    {
+      "id": 17,
+      "name": "dancing"
+    },
+    {
+      "id": 18,
+      "name": "martial_arts"
+    },
+    {
+      "id": 19,
+      "name": "fitness"
+    },
+    {
+      "id": 20,
+      "name": "scientific_conferences"
+    },
+    {
+      "id": 21,
+      "name": "scientific_articles"
+    },
+    {
+      "id": 22,
+      "name": "olympiads"
+    },
+    {
+      "id": 23,
+      "name": "educational_events"
+    },
+    {
+      "id": 24,
+      "name": "volunteering"
+    },
+    {
+      "id": 25,
+      "name": "charity"
+    },
+    {
+      "id": 26,
+      "name": "design"
+    },
+    {
+      "id": 27,
+      "name": "video"
+    },
+    {
+      "id": 28,
+      "name": "drawing"
+    },
+    {
+      "id": 29,
+      "name": "military_affairs"
+    },
+    {
+      "id": 30,
+      "name": "art"
+    },
+    {
+      "id": 31,
+      "name": "culture"
+    },
+    {
+      "id": 32,
+      "name": "programming"
+    }
+  ]
+}
