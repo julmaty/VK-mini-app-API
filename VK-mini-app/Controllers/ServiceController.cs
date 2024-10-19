@@ -30,9 +30,9 @@ namespace VK_mini_app.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<ServiceController> _logger;
 
-        public ServiceController(ILogger<WeatherForecastController> logger, IConfiguration configuration, ApplicationContext context)
+        public ServiceController(ILogger<ServiceController> logger, IConfiguration configuration, ApplicationContext context)
         {
             _logger = logger;
             _httpClient = new HttpClient();

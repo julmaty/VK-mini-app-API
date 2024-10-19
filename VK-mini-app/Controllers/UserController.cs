@@ -17,11 +17,13 @@ namespace VK_mini_app.Controllers
     {
         private readonly ApplicationContext _context;
         private readonly IConfiguration Configuration;
+        private readonly IServiceProvider _serviceProvider;
 
-        public UserController(ApplicationContext context, IConfiguration configuration)
+        public UserController(ApplicationContext context, IConfiguration configuration, IServiceProvider serviceProvider)
         {
             _context = context;
             Configuration = configuration;
+            _serviceProvider = serviceProvider;
         }
 
         // GET: /User/getScore?vkId=12345
@@ -283,6 +285,10 @@ namespace VK_mini_app.Controllers
         [Route("getAvatarInitial/{vkid}/{sex}")]
         public async Task<ActionResult<string>> getAvatarInitial(int vkid, int sexint)
         {
+            using (var db = (ApplicationContext)_serviceProvider.GetService(typeof(ApplicationContext)))
+            {
+
+            }
             // Ищем пользователя по VkId
             var user = await _context.Users.FirstOrDefaultAsync(u => u.VkId == vkid);
 
