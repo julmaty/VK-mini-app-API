@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Web;
@@ -213,11 +214,11 @@ namespace VK_mini_app.Controllers
         }
 
         [HttpPost]
-        [Route("getInitialCategories/{vkid}")]
-        public async Task<ActionResult<List<CategoryUserViewModel>>> getInitialCategories(int vkid)
+        [Route("register/{vkid}")]
+        public async Task<ActionResult<List<CategoryUserViewModel>>> register(int vkid)
         {
             // Шаг 1: Получение информации о пользователе по vkid
-            var vkUserResponse = await GetUser(vkid);
+            BaseResponse<List<GetUsersResponse>> vkUserResponse = await GetUser(vkid);
             if (vkUserResponse == null || vkUserResponse.Response == null || !vkUserResponse.Response.Any())
             {
                 throw new Exception("Не удалось получить информацию о пользователе из VK.");
@@ -234,10 +235,6 @@ namespace VK_mini_app.Controllers
                 throw new Exception("Не удалось найти соответствующую запись UserInfo.");
             }
 
-            // Шаг 3: Вызов метода GPT для получения трех категорий
-            string gptResponse = await GPT(item, vkUserResponse);
-            var categoryIds = gptResponse.Split(',').Select(int.Parse).ToList();
-
             // Шаг 4: Добавление нового пользователя в базу данных
             var newUser = new User
             {
@@ -250,6 +247,10 @@ namespace VK_mini_app.Controllers
 
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
+
+            // Шаг 3: Вызов метода GPT для получения трех категорий
+            string gptResponse = await GPT(item, vkUserResponse);
+            var categoryIds = gptResponse.Split(',').Select(int.Parse).ToList();
 
             // Шаг 5: Создание записей UserToCategoryScore для полученных категорий
             List<CategoryUserViewModel> categoryViewModels = new List<CategoryUserViewModel>();
@@ -281,14 +282,48 @@ namespace VK_mini_app.Controllers
             return Ok(categoryViewModels);
         }
 
+        private async System.Threading.Tasks.Task getInitialCategories(UserInfo item, BaseResponse<List<GetUsersResponse>> vkUserResponse, int userId)
+        {
+            using (var db = (ApplicationContext)_serviceProvider.GetService(typeof(ApplicationContext)))
+            {
+                // Шаг 3: Вызов метода GPT для получения трех категорий
+                string gptResponse = await GPT(item, vkUserResponse);
+                var categoryIds = gptResponse.Split(',').Select(int.Parse).ToList();
+
+                // Шаг 5: Создание записей UserToCategoryScore для полученных категорий
+                List<CategoryUserViewModel> categoryViewModels = new List<CategoryUserViewModel>();
+                List<string> bestcategories = new List<string>();
+                foreach (int categoryId in categoryIds)
+                {
+                    var category = await db.Categories.FindAsync(categoryId);
+                    if (category != null)
+                    {
+                        var userToCategoryScore = new UserToCategoryScore
+                        {
+                            UserId = userId,
+                            CategoryId = categoryId,
+                            Level = 1
+                        };
+                        db.UserToCategoryScores.Add(userToCategoryScore);
+
+                        categoryViewModels.Add(new CategoryUserViewModel
+                        {
+                            Id = category.Id,
+                            Name = category.Name,
+                            Level = 1
+                        });
+                        bestcategories.Add(category.Name);
+                    }
+                }
+                await db.SaveChangesAsync();
+            }
+
+        }
+
         [HttpPost]
         [Route("getAvatarInitial/{vkid}/{sex}")]
         public async Task<ActionResult<string>> getAvatarInitial(int vkid, int sexint)
         {
-            using (var db = (ApplicationContext)_serviceProvider.GetService(typeof(ApplicationContext)))
-            {
-
-            }
             // Ищем пользователя по VkId
             var user = await _context.Users.FirstOrDefaultAsync(u => u.VkId == vkid);
 
